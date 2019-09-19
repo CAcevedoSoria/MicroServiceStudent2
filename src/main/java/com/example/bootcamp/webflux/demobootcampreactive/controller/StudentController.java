@@ -3,11 +3,13 @@ package com.example.bootcamp.webflux.demobootcampreactive.controller;
 import com.example.bootcamp.webflux.demobootcampreactive.model.Student;
 import com.example.bootcamp.webflux.demobootcampreactive.service.StudentService;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-
-
 /** The type Student controller. */
 @RestController
-@RequestMapping("/api/v1.0")
+@RequestMapping("/api/v1.0/students")
 public class StudentController {
 
   @Autowired private StudentService studentService;
@@ -34,33 +34,19 @@ public class StudentController {
   /**
    * Create mono.
    *
-   * @param studentMono the student mono
+   * @param student the student
    * @return the mono
    */
   @PostMapping
-  public Mono<ResponseEntity<Map<String, Object>>> create(
-      @Valid @RequestBody Mono<Student> studentMono) {
+  public Mono<ResponseEntity<Student>> create(@Valid @RequestBody Student student) {
 
-    Map<String, Object> respuesta = new HashMap<String, Object>();
-
-    return studentMono.flatMap(
-        student -> {
-          if (student.getDateOfBirth() == null) {
-            student.setDateOfBirth(new Date());
-          }
-
-          return studentService
-              .save(student)
-              .map(
-                  p -> {
-                    respuesta.put("producto", p);
-                    respuesta.put("mensaje", "Producto creado con éxito");
-                    respuesta.put("timestamp", new Date());
-                    return ResponseEntity.created(URI.create("/api/v1.0".concat(p.getId())))
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .body(respuesta);
-                  });
-        });
+    return studentService
+      .save(student)
+      .map(
+        p ->
+          ResponseEntity.created(URI.create("/api/v1.0/students".concat(p.getId())))
+            .contentType(MediaType.APPLICATION_JSON_UTF8)
+            .body(p));
   }
 
   /**
@@ -68,7 +54,7 @@ public class StudentController {
    *
    * @return the mono
    */
-  @GetMapping("/students")
+  @GetMapping
   public Mono<ResponseEntity<Flux<Student>>> findAll() {
     return Mono.just(
         ResponseEntity.ok()
@@ -106,6 +92,7 @@ public class StudentController {
             p -> {
               p.setFullName(student.getFullName());
               p.setGender(student.getGender());
+              p.setBirthday(student.getBirthday());
               p.setAddress(student.getAddress());
               p.setAcademicPeriod(student.getAcademicPeriod());
               p.setTypeDocument(student.getTypeDocument());
@@ -115,10 +102,9 @@ public class StudentController {
             })
         .map(
             p ->
-                ResponseEntity.created(URI.create("/api/v1.0".concat(p.getId())))
-                    .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .body(p))
-        .defaultIfEmpty(ResponseEntity.notFound().build());
+
+                ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(p))
+      .defaultIfEmpty(ResponseEntity.notFound().build());
   }
 
   /**
@@ -166,5 +152,19 @@ public class StudentController {
         .findFullName(name)
         .map(p -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(p))
         .defaultIfEmpty(ResponseEntity.notFound().build());
+  }
+
+  /**
+   * Find bybirthday between flux.
+   *
+   * @param date1 the date 1
+   * @param date2 the date 2
+   * @return the flux
+   */
+  @GetMapping("date/{date1}/{date2}")
+  public Flux<Student> findBybirthdayBetween(
+      @PathVariable("date1") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date1,
+      @PathVariable("date2") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date2) {
+    return studentService.findBybirthdayBetween(date1, date2);
   }
 }

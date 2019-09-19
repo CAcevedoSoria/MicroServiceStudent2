@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -33,11 +34,11 @@ public class StudentControllerTest {
 
     Student parent =
         new Student(
-            "eweweewew", " Alberto", "male", new Date(), "Cordova 189", "7vo", "dni", "3232324");
+             " Alberto Acevedo Soria", "male", LocalDate.of(1993,02,22), "Cordova 189", "7vo", "dni", "98765654");
 
     client
         .post()
-        .uri("/api/v1.0/")
+        .uri("/api/v1.0/students")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .accept(MediaType.APPLICATION_JSON_UTF8)
         .body(Mono.just(parent), Student.class)
@@ -77,10 +78,10 @@ public class StudentControllerTest {
   @Test
   public void findById() {
 
-    Student parent = studentService.findById("5d81585036ec186c7ca0dedc").block();
+    Student parent = studentService.findById("5d84031e36ec183504da04e1").block();
     client
         .get()
-        .uri("/api/v1.0" + "/{id}", Collections.singletonMap("id", parent.getId()))
+        .uri("/api/v1.0/students" + "/{id}", Collections.singletonMap("id", parent.getId()))
         .accept(MediaType.APPLICATION_JSON_UTF8)
         .exchange()
         .expectStatus()
@@ -99,25 +100,18 @@ public class StudentControllerTest {
   @Test
   public void update() {
 
-    Student parent = studentService.findFullName("Diego Acevedo").block();
+    Student parent = studentService.findFullName("hOLIWI").block();
 
-    Student parentEdit =
-        new Student(
-            "5d81586936ec186c7ca0dedd",
-            "Dario Acevedo",
-            "female",
-            new Date(),
-            "arequipa 1000",
-            "7vo",
-            "dni",
-            "43434343");
+ Student studentedit = new Student("ABCS","Male",LocalDate.of(1998,03,21),"ostopa 599","1 cycle","dni","87267252");
+
+
 
     client
         .put()
-        .uri("/api/v1.0" + "/{id}", Collections.singletonMap("id", parent.getId()))
+        .uri("/api/v1.0/students" + "/{id}", Collections.singletonMap("id", parent.getId()))
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .accept(MediaType.APPLICATION_JSON_UTF8)
-        .body(Mono.just(parentEdit), Student.class)
+        .body(Mono.just(studentedit), Student.class)
         .exchange()
         .expectStatus()
         .isCreated()
@@ -127,40 +121,38 @@ public class StudentControllerTest {
         .jsonPath("$.id")
         .isNotEmpty()
         .jsonPath("$.id")
-        .isEqualTo("5d81586936ec186c7ca0dedd");
+        .isEqualTo("5d84049436ec18661417e191");
   }
 
   @Test
   public void findByDocument() {
 
-    Student parent = studentService.findByDocument("73674232").block();
+    Student parent = studentService.findByDocument("98765677").block();
     client
-        .get()
-        .uri(
-            "/api/v1.0" + "/document/{document}",
-            Collections.singletonMap("document", parent.getDocument()))
-        .accept(MediaType.APPLICATION_JSON_UTF8)
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectHeader()
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
-        .expectBody(Student.class)
-        .consumeWith(
-            response -> {
-              Student p = response.getResponseBody();
-              Assertions.assertThat(p.getDocument()).isNotEmpty();
-              Assertions.assertThat(p.getDocument().length() > 0).isTrue();
-            });
+      .get()
+      .uri("/api/v1.0/students" + "/document/{document}", Collections.singletonMap("document", parent.getDocument()))
+      .accept(MediaType.APPLICATION_JSON_UTF8)
+      .exchange()
+      .expectStatus()
+      .isOk()
+      .expectHeader()
+      .contentType(MediaType.APPLICATION_JSON_UTF8)
+      .expectBody(Student.class)
+      .consumeWith(
+        response -> {
+          Student p = response.getResponseBody();
+          Assertions.assertThat(p.getDocument()).isNotEmpty();
+          Assertions.assertThat(p.getDocument().length() > 0).isTrue();
+        });
   }
 
   @Test
   public void findByFullName() {
 
-    Student parent = studentService.findFullName("christian acevedo").block();
+    Student student = studentService.findFullName("Alberto Acevedo Soria").block();
     client
         .get()
-        .uri("/api/v1.0" + "/name/{name}", Collections.singletonMap("name", parent.getFullName()))
+        .uri("/api/v1.0/students" + "/name/{name}", Collections.singletonMap("name",student.getFullName()))
         .accept(MediaType.APPLICATION_JSON_UTF8)
         .exchange()
         .expectStatus()
@@ -179,10 +171,10 @@ public class StudentControllerTest {
   @Test
   public void eliminar() {
 
-    Student parent = studentService.findById("929282773").block();
+    Student parent = studentService.findById("5d8407b436ec1822102a2aba").block();
     client
         .delete()
-        .uri("/api/v1.0" + "/{id}", Collections.singletonMap("id", parent.getId()))
+        .uri("/api/v1.0/students" + "/{id}", Collections.singletonMap("id", parent.getId()))
         .exchange()
         .expectStatus()
         .isNoContent()
@@ -191,7 +183,7 @@ public class StudentControllerTest {
 
     client
         .get()
-        .uri("/api/v1.0" + "/{id}", Collections.singletonMap("id", parent.getId()))
+        .uri("/api/v1.0/students" + "/{id}", Collections.singletonMap("id", parent.getId()))
         .exchange()
         .expectStatus()
         .isNotFound()

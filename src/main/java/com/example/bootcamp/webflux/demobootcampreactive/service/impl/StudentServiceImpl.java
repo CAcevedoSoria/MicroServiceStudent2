@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
+
 /** The type Student service. */
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -44,4 +46,11 @@ public class StudentServiceImpl implements StudentService {
 
     return studentRepository.findByFullName(name);
   }
+
+  @Override
+  public Flux<Student> findBybirthdayBetween(LocalDate date1, LocalDate date2) {
+    return studentRepository.findBybirthdayBetween(date1, date2);
+  }
+
+
 }
