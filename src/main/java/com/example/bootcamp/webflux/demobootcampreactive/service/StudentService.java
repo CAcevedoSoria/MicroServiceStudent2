@@ -1,10 +1,10 @@
 package com.example.bootcamp.webflux.demobootcampreactive.service;
 
 import com.example.bootcamp.webflux.demobootcampreactive.model.Student;
+import java.time.LocalDate;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
 
 /** The interface Student service. */
 public interface StudentService {

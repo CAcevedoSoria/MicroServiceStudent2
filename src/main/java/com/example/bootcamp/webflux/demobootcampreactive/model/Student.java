@@ -3,32 +3,25 @@ package com.example.bootcamp.webflux.demobootcampreactive.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
-import java.util.Date;
-import lombok.AllArgsConstructor;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-
 /** The type Student. */
 @Getter
 @Setter
-
 @NoArgsConstructor
 @Document(collection = "Student")
 public class Student {
 
-
   @Id private String id;
 
-  @Size(min = 3, max = 25)
-  @NotEmpty
+
   private String fullName;
   @NotEmpty
   private String gender;
@@ -38,10 +31,27 @@ public class Student {
   private String address;
   private String academicPeriod;
   private String typeDocument;
-  @Size(min = 8 , max=8)
+  @Size(min = 8, max = 8)
   private String document;
 
-  public Student(String fullName, String gender, LocalDate birthday, String address, String academicPeriod, String typeDocument,  String document) {
+  /**
+   * Instantiates a new Student.
+   *
+   * @param fullName the full name
+   * @param gender the gender
+   * @param birthday the birthday
+   * @param address the address
+   * @param academicPeriod the academic period
+   * @param typeDocument the type document
+   * @param document the document
+   */
+  public Student(
+      String fullName,
+      String gender,
+      LocalDate birthday,
+      String address,
+      String academicPeriod,
+      String typeDocument, String document) {
     this.fullName = fullName;
     this.gender = gender;
     this.birthday = birthday;
@@ -50,6 +60,7 @@ public class Student {
     this.typeDocument = typeDocument;
     this.document = document;
   }
-
-
 }
+
+
+

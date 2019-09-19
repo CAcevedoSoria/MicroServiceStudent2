@@ -1,11 +1,11 @@
 package com.example.bootcamp.webflux.demobootcampreactive.repository;
 
 import com.example.bootcamp.webflux.demobootcampreactive.model.Student;
+import java.time.LocalDate;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
 
 /** The interface Student repository. */
 public interface StudentRepository extends ReactiveMongoRepository<Student, String> {

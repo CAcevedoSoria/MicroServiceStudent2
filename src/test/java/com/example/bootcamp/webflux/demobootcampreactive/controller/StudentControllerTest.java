@@ -149,25 +149,26 @@ public class StudentControllerTest {
   @Test
   public void findByFullName() {
 
-    Student student = studentService.findFullName("Alberto Acevedo Soria").block();
+    Student student = studentService.findFullName("hOLIWI").block();
     client
-        .get()
-        .uri("/api/v1.0/students" + "/name/{name}", Collections.singletonMap("name",student.getFullName()))
-        .accept(MediaType.APPLICATION_JSON_UTF8)
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectHeader()
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
-        .expectBody(Student.class)
-        .consumeWith(
-            response -> {
-              Student p = response.getResponseBody();
-              Assertions.assertThat(p.getFullName()).isNotEmpty();
-              Assertions.assertThat(p.getFullName().length() > 0).isTrue();
-            });
+      .get()
+      .uri(
+        "/api/v1.0/parents" + "/name/{name}",
+        Collections.singletonMap("name", student.getFullName()))
+      .accept(MediaType.APPLICATION_JSON_UTF8)
+      .exchange()
+      .expectStatus()
+      .isOk()
+      .expectHeader()
+      .contentType(MediaType.APPLICATION_JSON_UTF8)
+      .expectBody(Student.class)
+      .consumeWith(
+        response -> {
+          Student p = response.getResponseBody();
+          Assertions.assertThat(p.getFullName()).isNotEmpty();
+          Assertions.assertThat(p.getFullName().length() > 0).isTrue();
+        });
   }
-
   @Test
   public void eliminar() {
 

@@ -149,9 +149,9 @@ public class StudentController {
   @GetMapping("name/{name}")
   public Mono<ResponseEntity<Student>> findByFullName(@PathVariable String name) {
     return studentService
-        .findFullName(name)
-        .map(p -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(p))
-        .defaultIfEmpty(ResponseEntity.notFound().build());
+      .findFullName(name)
+      .map(p -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(p))
+      .defaultIfEmpty(ResponseEntity.notFound().build());
   }
 
   /**
