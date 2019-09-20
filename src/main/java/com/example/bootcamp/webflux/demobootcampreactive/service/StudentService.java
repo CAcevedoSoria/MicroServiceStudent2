@@ -54,7 +54,7 @@ public interface StudentService {
    * @param name the name
    * @return the mono
    */
-  public Mono<Student> findFullName(String name);
+  public Mono<Student> findByFullName(String name);
 
   /**
    * Find bybirthday between flux.

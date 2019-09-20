@@ -42,7 +42,7 @@ public class StudentServiceImpl implements StudentService {
   }
 
   @Override
-  public Mono<Student> findFullName(String name) {
+  public Mono<Student> findByFullName(String name) {
     return studentRepository.findByFullName(name);
   }
 

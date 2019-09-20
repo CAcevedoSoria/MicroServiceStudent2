@@ -100,7 +100,7 @@ public class StudentControllerTest {
   @Test
   public void update() {
 
-    Student parent = studentService.findFullName("hOLIWI").block();
+    Student parent = studentService.findByFullName(" hOLIWI").block();
 
  Student studentedit = new Student("ABCS","Male",LocalDate.of(1998,03,21),"ostopa 599","1 cycle","dni","87267252");
 
@@ -149,7 +149,7 @@ public class StudentControllerTest {
   @Test
   public void findByFullName() {
 
-    Student student = studentService.findFullName("hOLIWI").block();
+    Student student = studentService.findByFullName(" hOLIWI").block();
     client
       .get()
       .uri(

@@ -51,7 +51,8 @@ public class Student {
       LocalDate birthday,
       String address,
       String academicPeriod,
-      String typeDocument, String document) {
+      String typeDocument,
+      String document) {
     this.fullName = fullName;
     this.gender = gender;
     this.birthday = birthday;

@@ -170,7 +170,7 @@ public class StudentServiceImplTest {
 
     when(studentRepository.findByFullName("cristohper")).thenReturn(Mono.just(student));
 
-    Mono<Student> actual = studentService.findFullName("cristohper");
+    Mono<Student> actual = studentService.findByFullName("cristohper");
 
     assertResults(actual, student);
   }

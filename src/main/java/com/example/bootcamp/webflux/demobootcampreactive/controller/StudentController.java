@@ -4,9 +4,6 @@ import com.example.bootcamp.webflux.demobootcampreactive.model.Student;
 import com.example.bootcamp.webflux.demobootcampreactive.service.StudentService;
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -149,9 +146,10 @@ public class StudentController {
   @GetMapping("name/{name}")
   public Mono<ResponseEntity<Student>> findByFullName(@PathVariable String name) {
     return studentService
-      .findFullName(name)
+      .findByFullName(name)
       .map(p -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(p))
-      .defaultIfEmpty(ResponseEntity.notFound().build());
+        .defaultIfEmpty(ResponseEntity.notFound().build());
+
   }
 
   /**
